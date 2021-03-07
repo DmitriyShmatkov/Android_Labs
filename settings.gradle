@@ -1,2 +1,3 @@
-include ':app'
+include ':Lab2 (Activities)'
+include ':Lab1'
 rootProject.name = "Android Labs"
