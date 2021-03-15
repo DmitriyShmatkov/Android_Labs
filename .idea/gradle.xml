@@ -11,8 +11,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/Lab1" />
+            <option value="$PROJECT_DIR$/Lab1 (Calculator)" />
             <option value="$PROJECT_DIR$/Lab2 (Activities)" />
+            <option value="$PROJECT_DIR$/Lab3 (ContactList)" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
