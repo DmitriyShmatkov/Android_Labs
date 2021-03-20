@@ -3,6 +3,7 @@ package ua.opu.contactlist;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,12 +21,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import fragments.ContactsFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final int ADD_CONTACT_REQUEST_CODE = 200;
-
-    private List<Contact> contactList;          // модель источника данных
-    private ContactsAdapter contactsAdapter;    // адаптер для спискового элемента
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,49 +33,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setWindow();
 
-        // получаем ссылки на элементы UI
-        RecyclerView recyclerView = findViewById(R.id.list);
-        FloatingActionButton addContactButton = findViewById(R.id.fab);
-
-        // инициализируем поля класса
-        contactList = new ArrayList<>();
-        contactsAdapter = new ContactsAdapter(contactList);
-
-        // усталавниваем слушатель на кнопку "+" (открытие Activity добавления контакта)
-        addContactButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddContactActivity.class);
-            startActivityForResult(intent, ADD_CONTACT_REQUEST_CODE);
-        });
-
-        // настраиваем RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        recyclerView.setAdapter(contactsAdapter);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.container, ContactsFragment.class, null)
+                .addToBackStack("main")
+                .commit();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // необходимые проверки, создание нового объекта Contact и добавление его в список,
-        // оповещение адептера об изменении источника данных
-        if (requestCode == ADD_CONTACT_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    // получаем данные из Intent
-                    String name = data.getStringExtra(Intent.EXTRA_USER);
-                    String email = data.getStringExtra(Intent.EXTRA_EMAIL);
-                    String phone = data.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-                    // если URI фото равен null, записываем null, иначе парсим URI
-                    Uri imageUri = data.getStringExtra(Intent.EXTRA_ORIGINATING_URI) == null ?
-                            null : Uri.parse(data.getStringExtra(Intent.EXTRA_ORIGINATING_URI));
-
-                    // создаём новый контакт, добавляем его в список и уведомляем адаптер
-                    // об изменении источника данных
-                    Contact contact = new Contact(name, email, phone, imageUri);
-                    contactList.add(contact);
-                    contactsAdapter.notifyDataSetChanged();
-                }
-            }
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 1) {
+            fm.popBackStack();
+        } else {
+            finish();
         }
     }
 

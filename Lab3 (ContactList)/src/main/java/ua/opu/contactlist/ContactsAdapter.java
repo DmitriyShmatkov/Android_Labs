@@ -21,6 +21,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     private static final int NON_EMPTY_LIST_TYPE = 1;
 
     private List<Contact> contactList;  // источник данных
+    private DeleteItemListener deleteItemListener;
 
     class ContactHolder extends RecyclerView.ViewHolder {
 
@@ -29,8 +30,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         private TextView phone;
         private ImageView image;
         private ImageButton deleteButton;
+        private DeleteItemListener deleteItemListener;
 
-        public ContactHolder(@NonNull View itemView) {
+        public ContactHolder(@NonNull View itemView, DeleteItemListener deleteItemListener) {
             super(itemView);
 
             name = itemView.findViewById(R.id.name);
@@ -38,11 +40,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             phone = itemView.findViewById(R.id.phone);
             image = itemView.findViewById(R.id.contact_image);
             deleteButton = itemView.findViewById(R.id.clear_button);
+            this.deleteItemListener = deleteItemListener;
         }
     }
 
-    public ContactsAdapter(List<Contact> contactList) {
+    public interface DeleteItemListener {
+        void onDeleteItem(int position);
+    }
+
+    public ContactsAdapter(List<Contact> contactList, DeleteItemListener deleteItemListener) {
         this.contactList = contactList;
+        this.deleteItemListener = deleteItemListener;
     }
 
     @NonNull
@@ -58,7 +66,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
             v = layoutInflater.inflate(R.layout.list_no_items, parent, false);
         }
 
-        return new ContactHolder(v);
+        return new ContactHolder(v, deleteItemListener);
     }
 
     @Override
