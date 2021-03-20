@@ -13,7 +13,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Lab1 (Calculator)" />
             <option value="$PROJECT_DIR$/Lab2 (Activities)" />
-            <option value="$PROJECT_DIR$/Lab3 (ContactList)" />
+            <option value="$PROJECT_DIR$/Lab3_4 (ContactList)" />
+            <option value="$PROJECT_DIR$/Lab4 (ViewPager)" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
